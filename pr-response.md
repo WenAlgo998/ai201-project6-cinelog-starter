@@ -23,7 +23,10 @@ I verified this logic by reviewing how `services/collection_service.py` handles 
 ## Comment 3 — Missing test
 
 **What I did:**
+Created a new test file `tests/test_watchlist.py` and implemented `test_add_to_watchlist_nonexistent_film_raises`.
+
 **How I verified:**
+I modeled this completely on `test_add_to_collection_nonexistent_film_raises` from `tests/test_collection.py`, ensuring identical testing fixture environments and database isolation paradigms are shared. I confirmed it passes perfectly by running `pytest tests/test_watchlist.py -v`.
 
 ## Comment 4 — Default visibility
 
