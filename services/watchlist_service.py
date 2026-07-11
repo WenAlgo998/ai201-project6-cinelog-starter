@@ -9,9 +9,10 @@ from models import Film, WatchlistEntry
 from services.collection_service import FilmNotFoundError
 
 
-def save_to_watchlist(user_id, film_id):
+# Change the function definition name from save_to_watchlist to add_to_watchlist
+def add_to_watchlist(user_id, film_id):
     """
-    Save a film to a user's watchlist.
+    Add a film to a user's watchlist.
 
     Args:
         user_id (str): UUID of the user.

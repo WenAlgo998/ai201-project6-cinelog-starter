@@ -7,7 +7,10 @@
 ## Comment 1 — Rename
 
 **What I did:**
+Renamed the function `save_to_watchlist()` to `add_to_watchlist()` inside `services/watchlist_service.py` to preserve the codebase's strict `verb_to_noun` naming convention. I also updated the import statement and route invocation within `routes/watchlist.py`.
+
 **How I verified:**
+I performed a project-wide search (`grep` / Find in Files) for `save_to_watchlist` across the entire codebase repository. The search confirmed that the only occurrences were located within `services/watchlist_service.py` and its direct routing call site inside `routes/watchlist.py`, ensuring no dangling references remain.
 
 ## Comment 2 — Deduplication
 
