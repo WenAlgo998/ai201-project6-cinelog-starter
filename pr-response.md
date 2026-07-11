@@ -15,7 +15,10 @@ I performed a project-wide search (`grep` / Find in Files) for `save_to_watchlis
 ## Comment 2 — Deduplication
 
 **What I did:**
+Added a database query check to `add_to_watchlist()` that checks if a `WatchlistEntry` with the given `user_id` and `film_id` already exists. If found, it explicitly raises a newly defined custom exception, `AlreadyInWatchlistError`.
+
 **How I verified:**
+I verified this logic by reviewing how `services/collection_service.py` handles duplicate entries through `AlreadyInCollectionError`. This defensive structure safely arrests duplicate operations before database commits execute.
 
 ## Comment 3 — Missing test
 

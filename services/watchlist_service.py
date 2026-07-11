@@ -9,6 +9,12 @@ from models import Film, WatchlistEntry
 from services.collection_service import FilmNotFoundError
 
 
+# Define a custom exception mirroring collection_service.py patterns
+class AlreadyInWatchlistError(Exception):
+    """Raised when a film is already in the user's watchlist."""
+    pass
+
+
 # Change the function definition name from save_to_watchlist to add_to_watchlist
 def add_to_watchlist(user_id, film_id):
     """
@@ -23,10 +29,20 @@ def add_to_watchlist(user_id, film_id):
 
     Raises:
         FilmNotFoundError: If film_id does not exist.
+        AlreadyInWatchlistError: If the film is already in the user's watchlist.
     """
     film = db.session.get(Film, film_id)
     if film is None:
         raise FilmNotFoundError(f"No film found with id '{film_id}'")
+
+    # Replicate the add_to_collection() deduplication query pattern
+    existing = WatchlistEntry.query.filter_by(
+        user_id=user_id, film_id=film_id
+    ).first()
+    if existing:
+        raise AlreadyInWatchlistError(
+            f"Film '{film_id}' is already in this user's watchlist"
+        )
 
     entry = WatchlistEntry(user_id=user_id, film_id=film_id)
     db.session.add(entry)
