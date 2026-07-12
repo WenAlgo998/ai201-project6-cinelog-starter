@@ -47,3 +47,12 @@ def add_film(user_id):
     except AlreadyInWatchlistError as e:
         # Catch the duplicate error gracefully and return a 400 Bad Request
         return jsonify({"error": str(e)}), 400
+
+@watchlist_bp.route("/<user_id>/remove/<film_id>", methods=["DELETE"])
+def remove_film(user_id, film_id):
+    try:
+        with current_app.app_context():
+            result = remove_from_watchlist(user_id, film_id)
+        return jsonify(result), 200
+    except FilmNotFoundError as e:
+        return jsonify({"error": str(e)}), 404
