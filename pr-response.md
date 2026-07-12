@@ -2,7 +2,7 @@
 
 ## AI Usage
 
-<!-- Fill in at the end — how you used AI tools during this project -->
+I utilized an AI collaborator to accelerate codebase orientation and stress-test my architectural design decisions. Specifically, I prompted the AI to act as a cynical code reviewer to expose gaps in my arguments for maintaining a `public=True` visibility default (Comment 4) and alphabetical sort order (Comment 5). The AI raised a valid counterargument regarding user anxiety over tracking "guilty pleasure" movies publicly. This prompted me to explicitly add a section to my Comment 4 reasoning acknowledging that user autonomy is preserved because we provide an explicit toggle parameter, ensuring community growth isn't prioritized at the complete expense of user choice.
 
 ## Comment 1 — Rename
 
@@ -61,6 +61,31 @@ I updated `WatchlistEntry.film_id` in `models.py` to use `db.String(36)` and tar
 **How I verified no conflict remains:**
 I ran `git log --oneline` to verify that the resulting commit history is completely linear and clear of any automated "Merge branch..." loops. I then executed `pytest tests/ -v` to ensure the updated schema passes the entire test suite flawlessly.
 
+## Git Commit History
+
+Here is the clean, linear conventional commit history for the feature branch:
+
+![Git Commit Log History Screenshot](git-history.png)
+
 ## PR Description
 
-<!-- Written at the end — feature overview, design decisions, manual testing steps -->
+### Feature Overview
+
+This pull request introduces the core Watchlist feature to CineLog, allowing users to save films they intend to watch later. It implements the backend database architecture (`WatchlistEntry`), core service layer logic to safely append items and read user lists, and a dedicated RESTful routing endpoint (`POST /watchlist/<user_id>/add` and `GET /watchlist/<user_id>`)[cite: 1, 4, 5]. All aspects of this feature adhere to the project's strict `verb_to_noun` design patterns and incorporate rigorous duplicate protection mechanisms[cite: 1, 2].
+
+### Core Design Decisions
+
+- **Default Visibility (`public=True`):** The watchlist defaults to public to optimize for community engagement, collaborative film discovery, and social interactions across user profiles[cite: 1]. Tradeoffs regarding individual privacy are mitigated by providing users complete individual control to explicitly toggle visibility settings[cite: 1].
+- **Sort Order (Alphabetical):** Watchlists are fundamentally actionable queues rather than historical logs[cite: 1]. Sorting alphabetically by film title optimizes for immediate visual scanning and item retrieval[cite: 1]. Chronological sorting is bypassed to prevent long watchlists from burying older entries in an unnavigable timeline[cite: 1].
+
+### Manual Testing Instructions
+
+To manually verify the integrity of the watchlist feature, execute the following steps from your terminal environment using `curl` (ensure the local application server is running via `python app.py`)[cite: 1]:
+
+1. **Add a Valid Film to a User's Watchlist:**
+   Execute a POST request to add an existing film ID to a user's record:
+    ```bash
+    curl -X POST [http://127.0.0.1:5000/watchlist/test-user-uuid/add](http://127.0.0.1:5000/watchlist/test-user-uuid/add) \
+         -H "Content-Type: application/json" \
+         -d '{"film_id": "put-a-valid-film-uuid-here"}'
+    ```
