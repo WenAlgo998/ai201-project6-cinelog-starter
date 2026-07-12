@@ -77,6 +77,7 @@ def get_watchlist(user_id):
 
     return result
 
+
 def remove_from_watchlist(user_id, film_id):
     entry = WatchlistEntry.query.filter_by(user_id=user_id, film_id=film_id).first()
     if not entry:
@@ -84,3 +85,12 @@ def remove_from_watchlist(user_id, film_id):
     db.session.delete(entry)
     db.session.commit()
     return {"message": f"Film '{film_id}' successfully removed from watchlist"}
+
+
+def toggle_watchlist_visibility(user_id, film_id):
+    entry = WatchlistEntry.query.filter_by(user_id=user_id, film_id=film_id).first()
+    if not entry:
+        raise FilmNotFoundError(f"Film '{film_id}' not found in user's watchlist")
+    entry.public = not entry.public
+    db.session.commit()
+    return entry

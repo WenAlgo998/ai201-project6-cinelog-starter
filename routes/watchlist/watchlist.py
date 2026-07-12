@@ -48,11 +48,23 @@ def add_film(user_id):
         # Catch the duplicate error gracefully and return a 400 Bad Request
         return jsonify({"error": str(e)}), 400
 
+
 @watchlist_bp.route("/<user_id>/remove/<film_id>", methods=["DELETE"])
 def remove_film(user_id, film_id):
     try:
         with current_app.app_context():
             result = remove_from_watchlist(user_id, film_id)
         return jsonify(result), 200
+    except FilmNotFoundError as e:
+        return jsonify({"error": str(e)}), 404
+    
+    
+@watchlist_bp.route("/<user_id>/toggle/<film_id>", methods=["PATCH"])
+def toggle_visibility(user_id, film_id):
+    try:
+        with current_app.app_context():
+            entry = toggle_watchlist_visibility(user_id, film_id)
+            response_data = entry.to_dict()
+        return jsonify(response_data), 200
     except FilmNotFoundError as e:
         return jsonify({"error": str(e)}), 404
