@@ -40,4 +40,8 @@ def test_add_to_watchlist_nonexistent_film_raises(app, sample_user):
 
         with pytest.raises(FilmNotFoundError):
             add_to_watchlist(user_id=sample_user, film_id=fake_film_id)
-            
+
+def test_remove_nonexistent_film_throws_error(client):
+    # Try removing an item that isn't there to verify the 404/FilmNotFoundError
+    response = client.delete("/watchlist/some-user-id/remove/999999")
+    assert response.status_code == 404
