@@ -67,6 +67,18 @@ Here is the clean, linear conventional commit history for the feature branch:
 
 ![Git Commit Log History Screenshot](git-history.png)
 
+## Stretch Features
+
+### 1. Watchlist Removal (`remove_from_watchlist`)
+
+- **Implementation:** Added a `DELETE /watchlist/<user_id>/remove/<film_id>` endpoint and corresponding service function. If a user attempts to remove a film that is not on their watchlist, it explicitly raises a `FilmNotFoundError` and returns a 404 status, keeping parity with `collection_service` structures[cite: 8, 9].
+- **Testing:** A test was written to verify that dropping a non-existent film triggers this exception cleanly without database side-effects.
+
+### 2. Visibility Toggle Endpoint
+
+- **Implementation:** Added a `PATCH /watchlist/<user_id>/toggle/<film_id>` route.
+- **Mechanics:** Watchlist items default to `public=True` to foster community engagement[cite: 1]. Callers invoke this PATCH endpoint to toggle the boolean switch back and forth cleanly. If an entry is missing, it returns an explicit 404 error code.
+
 ## PR Description
 
 ### Feature Overview
