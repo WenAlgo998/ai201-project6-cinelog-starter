@@ -26,17 +26,19 @@ def view_watchlist(user_id):
 def add_film(user_id):
     """
     POST /watchlist/<user_id>/add
-
-    Body: { "film_id": <int> }
+    Body: { "film_id": <id>, "public": <bool> }
     """
     data = request.get_json()
     if not data or "film_id" not in data:
         return jsonify({"error": "film_id is required"}), 400
 
+    # Extract the optional public parameter, defaulting to True
+    public = data.get("public", True)
+
     try:
         with current_app.app_context():
             # Update call site here
-            entry = add_to_watchlist(user_id=user_id, film_id=data["film_id"])
+            entry = add_to_watchlist(user_id=user_id, film_id=data["film_id"], public=public)
             # Move this INSIDE the context block so it has session access
             response_data = entry.to_dict()
         return jsonify(response_data), 201

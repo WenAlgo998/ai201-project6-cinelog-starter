@@ -16,7 +16,7 @@ class AlreadyInWatchlistError(Exception):
 
 
 # Change the function definition name from save_to_watchlist to add_to_watchlist
-def add_to_watchlist(user_id, film_id):
+def add_to_watchlist(user_id, film_id, public=True):
     """
     Add a film to a user's watchlist.
 
@@ -44,7 +44,8 @@ def add_to_watchlist(user_id, film_id):
             f"Film '{film_id}' is already in this user's watchlist"
         )
 
-    entry = WatchlistEntry(user_id=user_id, film_id=film_id)
+    # Pass the public parameter directly to the model constructor
+    entry = WatchlistEntry(user_id=user_id, film_id=film_id, public=public)
     db.session.add(entry)
     db.session.commit()
     return entry
